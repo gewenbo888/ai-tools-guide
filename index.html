@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Tools Guide — AI工具使用指南</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=General+Sans:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf6f0;--bg2:#f2ece4;--bg3:#e8e0d4;
+  --ink:#1a1a2e;--ink2:#3a3a4e;--dim:#8a8898;--faint:#d4d0c8;
+  --accent:#ff6b35;--accent-bg:rgba(255,107,53,.06);--accent-border:rgba(255,107,53,.18);
+  --blue:#2563eb;--blue-bg:rgba(37,99,235,.05);
+  --green:#059669;--green-bg:rgba(5,150,105,.05);
+  --purple:#7c3aed;--purple-bg:rgba(124,58,237,.05);
+  --rose:#e11d48;--rose-bg:rgba(225,29,72,.05);
+  --amber:#d97706;--amber-bg:rgba(217,119,6,.05);
+  --teal:#0d9488;--teal-bg:rgba(13,148,136,.05);
+  --rule:rgba(26,26,46,.06);
+  --shadow:0 1px 3px rgba(26,26,46,.04),0 8px 24px rgba(26,26,46,.06);
+  --shadow-lg:0 4px 12px rgba(26,26,46,.06),0 20px 48px rgba(26,26,46,.1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:'General Sans',sans-serif;font-weight:400;line-height:1.75;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+.cn{font-family:'Noto Sans SC',sans-serif;}
+.mono{font-family:'JetBrains Mono',monospace;}
+h1,h2,h3{font-family:'General Sans',sans-serif;}
+
+.rv{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;}
+.rv.vis{opacity:1;transform:translateY(0);}
+.rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.18s}.rv.d3{transition-delay:.28s}
+.rv.d4{transition-delay:.38s}.rv.d5{transition-delay:.48s}.rv.d6{transition-delay:.58s}
+
+/* ═══ NAV ═══ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  background:rgba(250,246,240,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--rule);height:52px;
+  display:flex;align-items:center;padding:0 28px;gap:6px;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+}
+nav::-webkit-scrollbar{display:none;}
+.nav-logo{
+  font-weight:700;font-size:.85rem;color:var(--ink);flex-shrink:0;
+  margin-right:16px;border-right:1px solid var(--faint);padding-right:18px;
+  display:flex;align-items:center;gap:8px;
+}
+.nav-logo .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);}
+.nav-link{
+  font-size:.68rem;font-weight:500;letter-spacing:.04em;
+  color:var(--dim);padding:6px 12px;border-radius:8px;
+  transition:all .2s;flex-shrink:0;text-decoration:none;
+}
+.nav-link:hover{color:var(--ink);background:rgba(26,26,46,.04);}
+.nav-link.active{color:var(--accent);background:var(--accent-bg);}
+
+/* ═══ HERO ═══ */
+#hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  justify-content:center;padding:120px 48px 80px;
+  max-width:1200px;margin:0 auto;position:relative;
+}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:30px;}}
+
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.65rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);background:var(--accent-bg);
+  border:1px solid var(--accent-border);
+  padding:6px 14px;border-radius:100px;margin-bottom:20px;
+}
+.hero-badge .pulse{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s ease infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.3);}}
+
+h1.hero-t{font-size:clamp(2.4rem,4.5vw,3.6rem);font-weight:700;line-height:1.15;letter-spacing:-.03em;}
+.hero-cn{font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:clamp(1rem,1.8vw,1.25rem);color:var(--dim);margin-top:8px;}
+.hero-desc{margin-top:20px;font-size:.95rem;color:var(--ink2);max-width:480px;}
+.hero-desc-cn{font-family:'Noto Sans SC',sans-serif;font-size:.85rem;color:var(--dim);margin-top:8px;max-width:480px;}
+
+.hero-visual{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+}
+.hero-card{
+  background:#fff;border:1px solid var(--rule);border-radius:14px;
+  padding:18px 16px;box-shadow:var(--shadow);
+  transition:transform .3s,box-shadow .3s;
+}
+.hero-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.hero-card .hc-icon{font-size:1.4rem;margin-bottom:8px;}
+.hero-card .hc-name{font-weight:600;font-size:.82rem;}
+.hero-card .hc-type{font-size:.65rem;color:var(--dim);font-weight:500;letter-spacing:.04em;}
+
+/* ═══ SECTIONS ═══ */
+.sec{max-width:1200px;margin:0 auto;padding:80px 48px;}
+@media(max-width:700px){.sec{padding:50px 20px;}}
+.sec-label{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:.6rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:1rem;
+}
+.sec-label .num{
+  width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;
+  background:var(--ink);color:#fff;font-size:.55rem;font-weight:700;
+}
+h2{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:700;letter-spacing:-.02em;margin-bottom:.3rem;}
+.h2cn{font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:clamp(.85rem,1.5vw,1rem);color:var(--dim);margin-bottom:2rem;}
+
+/* ═══ TOOL GRID ═══ */
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;}
+@media(max-width:500px){.tool-grid{grid-template-columns:1fr;}}
+
+.tool-card{
+  background:#fff;border:1px solid var(--rule);border-radius:16px;
+  padding:28px 24px;position:relative;overflow:hidden;
+  box-shadow:var(--shadow);transition:transform .3s,box-shadow .3s,border-color .3s;
+}
+.tool-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.tool-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--tc);opacity:.6;transition:opacity .3s;
+}
+.tool-card:hover::before{opacity:1;}
+
+.tool-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;}
+.tool-icon{
+  width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;flex-shrink:0;
+}
+.tool-info{flex:1;}
+.tool-info h3{font-size:1.05rem;font-weight:700;line-height:1.3;}
+.tool-info .tool-cn{font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:.82rem;color:var(--dim);}
+.tool-cat{
+  font-size:.55rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 8px;border-radius:4px;display:inline-block;margin-top:4px;
+}
+
+.tool-desc{font-size:.88rem;color:var(--ink2);line-height:1.7;}
+.tool-desc-cn{font-family:'Noto Sans SC',sans-serif;font-size:.8rem;color:var(--dim);margin-top:6px;line-height:1.75;}
+
+.tool-use{margin-top:14px;}
+.tool-use h4{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin-bottom:8px;}
+.use-steps{list-style:none;counter-reset:steps;}
+.use-steps li{
+  counter-increment:steps;padding:6px 0 6px 28px;position:relative;
+  font-size:.82rem;color:var(--ink2);border-bottom:1px solid var(--rule);
+}
+.use-steps li:last-child{border-bottom:none;}
+.use-steps li::before{
+  content:counter(steps);position:absolute;left:0;top:7px;
+  width:18px;height:18px;border-radius:5px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.6rem;font-weight:700;
+  background:rgba(26,26,46,.04);color:var(--dim);
+}
+.use-steps .cn-step{font-family:'Noto Sans SC',sans-serif;font-size:.75rem;color:var(--dim);}
+
+.tool-tips{
+  margin-top:14px;padding:12px 14px;border-radius:10px;
+  background:rgba(26,26,46,.02);border:1px solid var(--rule);
+}
+.tool-tips h4{font-size:.68rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+.tool-tips p{font-size:.78rem;color:var(--ink2);}
+.tool-tips .cn-tip{font-family:'Noto Sans SC',sans-serif;font-size:.72rem;color:var(--dim);margin-top:4px;}
+
+.tool-link{
+  display:inline-flex;align-items:center;gap:4px;margin-top:14px;
+  font-size:.75rem;font-weight:600;color:var(--tc);text-decoration:none;
+  transition:opacity .2s;
+}
+.tool-link:hover{opacity:.7;}
+
+/* Card color variants */
+.tc-blue{--tc:var(--blue);}.tc-blue .tool-icon{background:var(--blue-bg);border:1px solid rgba(37,99,235,.12);color:var(--blue);}
+.tc-blue .tool-cat{background:var(--blue-bg);color:var(--blue);}
+.tc-green{--tc:var(--green);}.tc-green .tool-icon{background:var(--green-bg);border:1px solid rgba(5,150,105,.12);color:var(--green);}
+.tc-green .tool-cat{background:var(--green-bg);color:var(--green);}
+.tc-purple{--tc:var(--purple);}.tc-purple .tool-icon{background:var(--purple-bg);border:1px solid rgba(124,58,237,.12);color:var(--purple);}
+.tc-purple .tool-cat{background:var(--purple-bg);color:var(--purple);}
+.tc-rose{--tc:var(--rose);}.tc-rose .tool-icon{background:var(--rose-bg);border:1px solid rgba(225,29,72,.12);color:var(--rose);}
+.tc-rose .tool-cat{background:var(--rose-bg);color:var(--rose);}
+.tc-amber{--tc:var(--amber);}.tc-amber .tool-icon{background:var(--amber-bg);border:1px solid rgba(217,119,6,.12);color:var(--amber);}
+.tc-amber .tool-cat{background:var(--amber-bg);color:var(--amber);}
+.tc-teal{--tc:var(--teal);}.tc-teal .tool-icon{background:var(--teal-bg);border:1px solid rgba(13,148,136,.12);color:var(--teal);}
+.tc-teal .tool-cat{background:var(--teal-bg);color:var(--teal);}
+.tc-accent{--tc:var(--accent);}.tc-accent .tool-icon{background:var(--accent-bg);border:1px solid var(--accent-border);color:var(--accent);}
+.tc-accent .tool-cat{background:var(--accent-bg);color:var(--accent);}
+
+/* ═══ TIPS SECTION ═══ */
+.tips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:24px;}
+.tip-card{
+  background:#fff;border:1px solid var(--rule);border-radius:14px;
+  padding:22px 20px;box-shadow:var(--shadow);
+  transition:transform .2s;
+}
+.tip-card:hover{transform:translateY(-2px);}
+.tip-card h3{font-size:.9rem;font-weight:700;margin-bottom:.4rem;}
+.tip-card .tip-cn{font-family:'Noto Sans SC',sans-serif;font-weight:400;font-size:.78rem;color:var(--dim);margin-bottom:8px;}
+.tip-card p{font-size:.82rem;color:var(--ink2);}
+.tip-card .cn-text{font-family:'Noto Sans SC',sans-serif;font-size:.75rem;color:var(--dim);margin-top:6px;}
+
+/* ═══ FOOTER ═══ */
+footer{
+  text-align:center;padding:50px 48px;
+  border-top:1px solid var(--rule);max-width:1200px;margin:0 auto;
+}
+footer p{font-size:.75rem;color:var(--dim);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo"><div class="dot"></div>AI Tools Guide</div>
+  <a class="nav-link" href="#chat">Chat</a>
+  <a class="nav-link" href="#image">Image</a>
+  <a class="nav-link" href="#video">Video</a>
+  <a class="nav-link" href="#audio">Audio</a>
+  <a class="nav-link" href="#code">Code</a>
+  <a class="nav-link" href="#writing">Writing</a>
+  <a class="nav-link" href="#productivity">Productivity</a>
+  <a class="nav-link" href="#tips">Tips</a>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="hero-badge rv"><div class="pulse"></div>2026 Edition</div>
+      <h1 class="hero-t rv d1">The Complete<br>AI Tools Guide</h1>
+      <div class="hero-cn rv d2">AI工具使用指南 — 人人都能学会的AI实用手册</div>
+      <p class="hero-desc rv d3">
+        A practical, bilingual guide to the AI tools reshaping how we work, create, and think.
+        From chatbots to video generators &mdash; learn what each tool does, how to use it, and when to reach for it.
+      </p>
+      <p class="hero-desc-cn rv d3">
+        一份实用的双语指南，涵盖正在重塑我们工作、创造和思考方式的AI工具。从聊天机器人到视频生成器——了解每个工具的用途、使用方法和最佳场景。
+      </p>
+    </div>
+    <div class="hero-visual rv d2">
+      <div class="hero-card"><div class="hc-icon">&#128172;</div><div class="hc-name">ChatGPT</div><div class="hc-type">Conversation</div></div>
+      <div class="hero-card"><div class="hc-icon">&#127912;</div><div class="hc-name">Midjourney</div><div class="hc-type">Image</div></div>
+      <div class="hero-card"><div class="hc-icon">&#127916;</div><div class="hc-name">Sora</div><div class="hc-type">Video</div></div>
+      <div class="hero-card"><div class="hc-icon">&#128187;</div><div class="hc-name">Claude Code</div><div class="hc-type">Coding</div></div>
+      <div class="hero-card"><div class="hc-icon">&#127925;</div><div class="hc-name">Suno</div><div class="hc-type">Music</div></div>
+      <div class="hero-card"><div class="hc-icon">&#128196;</div><div class="hc-name">Notion AI</div><div class="hc-type">Writing</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CHAT & REASONING ═══ -->
+<div class="sec" id="chat">
+  <div class="sec-label rv"><div class="num">1</div>Chat & Reasoning 对话与推理</div>
+  <h2 class="rv d1">Conversational AI</h2>
+  <div class="h2cn rv d2">对话式AI — 你的智能助手</div>
+
+  <div class="tool-grid">
+    <!-- ChatGPT -->
+    <div class="tool-card tc-green rv">
+      <div class="tool-head">
+        <div class="tool-icon">&#128172;</div>
+        <div class="tool-info">
+          <h3>ChatGPT</h3>
+          <div class="tool-cn">OpenAI 旗舰对话模型</div>
+          <span class="tool-cat">Conversation 对话</span>
+        </div>
+      </div>
+      <div class="tool-desc">The tool that started the AI revolution. ChatGPT excels at answering questions, writing, brainstorming, analysis, and now multimodal tasks (image, voice, browsing).</div>
+      <div class="tool-desc-cn">引发AI革命的工具。ChatGPT擅长回答问题、写作、头脑风暴、分析，现已支持多模态任务（图像、语音、浏览）。</div>
+      <div class="tool-use">
+        <h4>How to Use 使用方法</h4>
+        <ol class="use-steps">
+          <li>Visit chat.openai.com or download the app<span class="cn-step"> 访问 chat.openai.com 或下载应用</span></li>
+          <li>Type your question or task in natural language<span class="cn-step"> 用自然语言输入你的问题或任务</span></li>
+          <li>Use GPT-4o for complex reasoning, o3 for deep analysis<span class="cn-step"> 复杂推理用GPT-4o，深度分析用o3</span></li>
+          <li>Upload images, PDFs, or files for context<span class="cn-step"> 上传图片、PDF或文件以提供上下文</span></li>
+        </ol>
+      </div>
+      <div class="tool-tips">
+        <h4>Pro Tip 实用技巧</h4>
+        <p>Be specific with your prompts. Instead of "write an email", say "write a professional email to a client declining a meeting, keeping a warm tone, under 100 words."</p>
+        <div class="cn-tip">提示词要具体。不要说"写一封邮件"，而是说"写一封专业邮件婉拒客户的会议邀请，保持温暖语气，100字以内。"</div>
+      </div>
+    </div>
+
+    <!-- Claude -->
+    <div class="tool-card tc-amber rv d1">
+      <div class="tool-head">
+        <div class="tool-icon">&#9679;</div>
+        <div class="tool-info">
+          <h3>Claude</h3>
+          <div class="tool-cn">Anthropic 智能助手</div>
+          <span class="tool-cat">Conversation 对话</span>
+        </div>
+      </div>
+      <div class="tool-desc">Known for nuanced reasoning, long-context understanding (up to 1M tokens), and careful, thoughtful responses. Excellent for analysis, writing, and coding. Claude Code is a powerful CLI coding agent.</div>
+      <div class="tool-desc-cn">以细腻推理、长上下文理解（最高100万token）和深思熟虑的回答著称。擅长分析、写作和编程。Claude Code是强大的命令行编程代理。</div>
+      <div class="tool-use">
+        <h4>How to Use 使用方法</h4>
+        <ol class="use-steps">
+          <li>Visit claude.ai or download the desktop/mobile app<span class="cn-step"> 访问 claude.ai 或下载桌面/移动应用</span></li>
+          <li>Use Projects to organize context and instructions<span class="cn-step"> 使用项目功能组织上下文和指令</span></li>
+          <li>Upload entire codebases, long documents, or books<span class="cn-step"> 上传完整代码库、长文档或书籍</span></li>
+          <li>Install Claude Code (CLI) for coding: npm i -g @anthropic-ai/claude-code<span class="cn-step"> 安装 Claude Code (命令行) 进行编程</span></li>
+        </ol>
+      </div>
+      <div class="tool-tips">
+        <h4>Pro Tip 实用技巧</h4>
+        <p>Claude's long context window is its superpower. Upload an entire repository, a 300-page PDF, or a full book and ask questions about it &mdash; it remembers everything.</p>
+        <div class="cn-tip">Claude的长上下文窗口是其超能力。上传整个代码仓库、300页的PDF或一整本书并提问——它能记住所有内容。</div>
+      </div>
+    </div>
+
+    <!-- Gemini -->
+    <div class="tool-card tc-blue rv d2">
+      <div class="tool-head">
+        <div class="tool-icon">&#10022;</div>
+        <div class="tool-info">
+          <h3>Gemini</h3>
+          <div class="tool-cn">Google 多模态AI</div>
+          <span class="tool-cat">Multimodal 多模态</span>
+        </div>
+      </div>
+      <div class="tool-desc">Google's multimodal AI integrated across Search, Gmail, Docs, and Android. Strong at real-time information, Google Workspace integration, and multimodal understanding.</div>
+      <div class="tool-desc-cn">Google的多模态AI，集成于搜索、Gmail、文档和Android。擅长实时信息、Google Workspace整合和多模态理解。</div>
+      <div class="tool-use">
+        <h4>How to Use 使用方法</h4>
+        <ol class="use-steps">
+          <li>Visit gemini.google.com or use the Gemini app<span class="cn-step"> 访问 gemini.google.com 或使用Gemini应用</span></li>
+          <li>Activate in Google Docs/Sheets/Slides for inline help<span class="cn-step"> 在Google文档/表格/幻灯片中激活获取内联帮助</span></li>
+          <li>Use Deep Research for comprehensive topic analysis<span class="cn-step"> 使用深度研究功能进行全面的主题分析</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- DeepSeek -->
+    <div class="tool-card tc-purple rv d3">
+      <div class="tool-head">
+        <div class="tool-icon">&#128301;</div>
+        <div class="tool-info">
+          <h3>DeepSeek</h3>
+          <div class="tool-cn">深度求索</div>
+          <span class="tool-cat">Reasoning 推理</span>
+        </div>
+      </div>
+      <div class="tool-desc">China's open-source reasoning powerhouse. DeepSeek-R1 shows its chain-of-thought reasoning process, making it excellent for math, logic, and coding problems. Free and open-weight.</div>
+      <div class="tool-desc-cn">中国的开源推理引擎。DeepSeek-R1展示思维链推理过程，特别擅长数学、逻辑和编程问题。免费且开源权重。</div>
+      <div class="tool-use">
+        <h4>How to Use 使用方法</h4>
+        <ol class="use-steps">
+          <li>Visit chat.deepseek.com (free, no login required for basic use)<span class="cn-step"> 访问 chat.deepseek.com（基础使用免费无需登录）</span></li>
+          <li>Toggle "Deep Think" mode for step-by-step reasoning<span class="cn-step"> 开启"深度思考"模式获取逐步推理</span></li>
+          <li>Great for math homework, coding puzzles, and logic problems<span class="cn-step"> 特别适合数学作业、编程挑战和逻辑问题</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ IMAGE GENERATION ═══ -->
+<div class="sec" id="image">
+  <div class="sec-label rv"><div class="num">2</div>Image Generation 图像生成</div>
+  <h2 class="rv d1">AI Image Tools</h2>
+  <div class="h2cn rv d2">AI图像工具 — 文字变图画</div>
+
+  <div class="tool-grid">
+    <div class="tool-card tc-purple rv">
+      <div class="tool-head">
+        <div class="tool-icon">&#127912;</div>
+        <div class="tool-info"><h3>Midjourney</h3><div class="tool-cn">最强AI绘画工具</div><span class="tool-cat">Image 图像</span></div>
+      </div>
+      <div class="tool-desc">The gold standard for AI art. Produces stunning, highly aesthetic images with a distinctive artistic style. Best for concept art, illustrations, and creative visuals.</div>
+      <div class="tool-desc-cn">AI艺术的黄金标准。生成令人惊叹的高美感图像，具有独特的艺术风格。最适合概念艺术、插画和创意视觉。</div>
+      <div class="tool-use">
+        <h4>How to Use 使用方法</h4>
+        <ol class="use-steps">
+          <li>Join Discord or use midjourney.com (web editor)<span class="cn-step"> 加入Discord或使用 midjourney.com（网页编辑器）</span></li>
+          <li>Type /imagine followed by your text prompt<span class="cn-step"> 输入 /imagine 加上你的文字描述</span></li>
+          <li>Use --ar 16:9 for widescreen, --v 7 for latest model<span class="cn-step"> 用 --ar 16:9 设宽屏，--v 7 用最新模型</span></li>
+          <li>Upscale (U) or create variations (V) of results<span class="cn-step"> 放大(U)或创建变体(V)</span></li>
+        </ol>
+      </div>
+      <div class="tool-tips">
+        <h4>Pro Tip 实用技巧</h4>
+        <p>Add style keywords: "cinematic lighting, 8k, detailed, artstation" for photorealistic results. For illustration: "watercolor, studio ghibli, soft palette".</p>
+        <div class="cn-tip">添加风格关键词："cinematic lighting, 8k, detailed"获得逼真效果。插画风格用"watercolor, studio ghibli, soft palette"。</div>
+      </div>
+    </div>
+
+    <div class="tool-card tc-rose rv d1">
+      <div class="tool-head">
+        <div class="tool-icon">&#127752;</div>
+        <div class="tool-info"><h3>DALL-E / GPT Image</h3><div class="tool-cn">OpenAI 图像生成</div><span class="tool-cat">Image 图像</span></div>
+      </div>
+      <div class="tool-desc">Integrated directly into ChatGPT. Best for quick image generation during conversations, editing existing images, and generating images with accurate text rendering.</div>
+      <div class="tool-desc-cn">直接集成在ChatGPT中。最适合对话中快速生成图像、编辑现有图像和生成包含准确文字的图像。</div>
+      <div class="tool-use">
+        <h4>How to Use 使用方法</h4>
+        <ol class="use-steps">
+          <li>Open ChatGPT and simply ask it to create an image<span class="cn-step"> 打开ChatGPT直接要求它创建图像</span></li>
+          <li>Describe what you want in natural language<span class="cn-step"> 用自然语言描述你想要的内容</span></li>
+          <li>Ask for edits: "make the background blue" or "remove the person"<span class="cn-step"> 要求编辑："把背景改成蓝色"或"移除人物"</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tool-card tc-teal rv d2">
+      <div class="tool-head">
+        <div class="tool-icon">&#9878;</div>
+        <div class="tool-info"><h3>Stable Diffusion</h3><div class="tool-cn">开源图像生成</div><span class="tool-cat">Open Source 开源</span></div>
+      </div>
+      <div class="tool-desc">The open-source champion. Run locally on your GPU for unlimited free generation. Massive community of models, LoRAs, and ControlNet extensions. Full creative control.</div>
+      <div class="tool-desc-cn">开源冠军。在本地GPU上运行，无限免费生成。拥有庞大的模型社区、LoRA和ControlNet扩展。完全的创作控制。</div>
+      <div class="tool-use">
+        <h4>How to Use 使用方法</h4>
+        <ol class="use-steps">
+          <li>Install ComfyUI or AUTOMATIC1111 WebUI locally<span class="cn-step"> 本地安装 ComfyUI 或 AUTOMATIC1111 WebUI</span></li>
+          <li>Download models from CivitAI or HuggingFace<span class="cn-step"> 从 CivitAI 或 HuggingFace 下载模型</span></li>
+          <li>Or use cloud: stability.ai, RunDiffusion, or Replicate<span class="cn-step"> 或使用云端：stability.ai、RunDiffusion 或 Replicate</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VIDEO ═══ -->
+<div class="sec" id="video">
+  <div class="sec-label rv"><div class="num">3</div>Video Generation 视频生成</div>
+  <h2 class="rv d1">AI Video Tools</h2>
+  <div class="h2cn rv d2">AI视频工具 — 文字变视频</div>
+
+  <div class="tool-grid">
+    <div class="tool-card tc-accent rv">
+      <div class="tool-head">
+        <div class="tool-icon">&#127916;</div>
+        <div class="tool-info"><h3>Sora</h3><div class="tool-cn">OpenAI 视频生成</div><span class="tool-cat">Video 视频</span></div>
+      </div>
+      <div class="tool-desc">OpenAI's text-to-video model. Generates cinematic, physically coherent video clips from text descriptions. Strong at camera movements, lighting, and realistic motion.</div>
+      <div class="tool-desc-cn">OpenAI的文生视频模型。从文本描述生成电影级、物理一致的视频片段。擅长镜头运动、光影和逼真动态。</div>
+      <div class="tool-use">
+        <h4>How to Use 使用方法</h4>
+        <ol class="use-steps">
+          <li>Access via sora.com (ChatGPT Plus/Pro subscription)<span class="cn-step"> 通过 sora.com 访问（需ChatGPT Plus/Pro订阅）</span></li>
+          <li>Write a detailed scene description with camera directions<span class="cn-step"> 编写包含镜头方向的详细场景描述</span></li>
+          <li>Specify duration, aspect ratio, and style<span class="cn-step"> 指定时长、宽高比和风格</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tool-card tc-blue rv d1">
+      <div class="tool-head">
+        <div class="tool-icon">&#127902;</div>
+        <div class="tool-info"><h3>Kling / Seedance</h3><div class="tool-cn">快手可灵 / 字节Seedance</div><span class="tool-cat">Video 视频</span></div>
+      </div>
+      <div class="tool-desc">Leading Chinese video AI models. Kling (Kuaishou) and Seedance (ByteDance) offer impressive video generation with strong motion coherence, often with generous free tiers.</div>
+      <div class="tool-desc-cn">领先的中国视频AI模型。可灵（快手）和Seedance（字节跳动）提供出色的视频生成，运动连贯性强，通常有慷慨的免费额度。</div>
+      <div class="tool-use">
+        <h4>How to Use 使用方法</h4>
+        <ol class="use-steps">
+          <li>Kling: visit klingai.com; Seedance: via Jimeng (即梦)<span class="cn-step"> 可灵：访问 klingai.com；Seedance：通过即梦</span></li>
+          <li>Upload a reference image or write a text prompt<span class="cn-step"> 上传参考图或编写文字提示</span></li>
+          <li>Choose between text-to-video or image-to-video modes<span class="cn-step"> 选择文生视频或图生视频模式</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tool-card tc-green rv d2">
+      <div class="tool-head">
+        <div class="tool-icon">&#127910;</div>
+        <div class="tool-info"><h3>Runway</h3><div class="tool-cn">创意视频工具</div><span class="tool-cat">Video Editing 视频编辑</span></div>
+      </div>
+      <div class="tool-desc">Pioneer of AI video. Gen-3 Alpha creates high-quality video from text/image. Also offers video-to-video style transfer, inpainting, motion brush, and professional editing tools.</div>
+      <div class="tool-desc-cn">AI视频的先驱。Gen-3 Alpha从文本/图像创建高质量视频。还提供视频风格转换、修补、运动笔刷和专业编辑工具。</div>
+      <div class="tool-use">
+        <h4>How to Use 使用方法</h4>
+        <ol class="use-steps">
+          <li>Sign up at runwayml.com (free tier available)<span class="cn-step"> 在 runwayml.com 注册（有免费额度）</span></li>
+          <li>Choose Gen-3 for text-to-video or upload a source video<span class="cn-step"> 选择Gen-3进行文生视频或上传源视频</span></li>
+          <li>Use Motion Brush to control specific areas of movement<span class="cn-step"> 使用运动笔刷控制特定区域的运动</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ AUDIO & MUSIC ═══ -->
+<div class="sec" id="audio">
+  <div class="sec-label rv"><div class="num">4</div>Audio & Music 音频与音乐</div>
+  <h2 class="rv d1">AI Audio Tools</h2>
+  <div class="h2cn rv d2">AI音频工具 — 语音、音乐与音效</div>
+
+  <div class="tool-grid">
+    <div class="tool-card tc-rose rv">
+      <div class="tool-head">
+        <div class="tool-icon">&#127925;</div>
+        <div class="tool-info"><h3>Suno</h3><div class="tool-cn">AI音乐创作</div><span class="tool-cat">Music 音乐</span></div>
+      </div>
+      <div class="tool-desc">Create complete songs with vocals, instruments, and lyrics from a text prompt. Supports multiple genres, languages, and styles. Surprisingly high quality for a text-to-music tool.</div>
+      <div class="tool-desc-cn">通过文字提示创建包含人声、乐器和歌词的完整歌曲。支持多种流派、语言和风格。文生音乐工具中质量惊人。</div>
+      <div class="tool-use">
+        <h4>How to Use 使用方法</h4>
+        <ol class="use-steps">
+          <li>Visit suno.com and sign in (free credits daily)<span class="cn-step"> 访问 suno.com 并登录（每日免费额度）</span></li>
+          <li>Describe genre, mood, and theme or write your own lyrics<span class="cn-step"> 描述流派、情绪和主题，或写自己的歌词</span></li>
+          <li>Generate, then extend or remix the result<span class="cn-step"> 生成后可以延长或混音</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tool-card tc-teal rv d1">
+      <div class="tool-head">
+        <div class="tool-icon">&#128483;</div>
+        <div class="tool-info"><h3>ElevenLabs</h3><div class="tool-cn">AI语音合成</div><span class="tool-cat">Voice 语音</span></div>
+      </div>
+      <div class="tool-desc">The most realistic AI voice synthesis available. Clone any voice from a short sample. Perfect for audiobooks, podcasts, voiceovers, dubbing, and multilingual content creation.</div>
+      <div class="tool-desc-cn">目前最逼真的AI语音合成。从短样本克隆任何声音。适合有声书、播客、配音和多语言内容创作。</div>
+      <div class="tool-use">
+        <h4>How to Use 使用方法</h4>
+        <ol class="use-steps">
+          <li>Visit elevenlabs.io (free tier: 10,000 chars/month)<span class="cn-step"> 访问 elevenlabs.io（免费额度：每月10,000字符）</span></li>
+          <li>Paste text, choose a voice, and generate<span class="cn-step"> 粘贴文本、选择声音、生成</span></li>
+          <li>Clone a custom voice by uploading a 1-minute audio sample<span class="cn-step"> 上传1分钟音频样本克隆自定义声音</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tool-card tc-amber rv d2">
+      <div class="tool-head">
+        <div class="tool-icon">&#128266;</div>
+        <div class="tool-info"><h3>NotebookLM</h3><div class="tool-cn">Google 笔记AI</div><span class="tool-cat">Audio Overview 音频概述</span></div>
+      </div>
+      <div class="tool-desc">Upload documents, PDFs, or YouTube videos and NotebookLM creates a podcast-style audio discussion between two AI hosts. A magical way to understand complex material by listening.</div>
+      <div class="tool-desc-cn">上传文档、PDF或YouTube视频，NotebookLM会创建两位AI主持人之间的播客式音频讨论。通过听觉理解复杂材料的神奇方式。</div>
+      <div class="tool-use">
+        <h4>How to Use 使用方法</h4>
+        <ol class="use-steps">
+          <li>Visit notebooklm.google.com<span class="cn-step"> 访问 notebooklm.google.com</span></li>
+          <li>Upload your sources (PDFs, docs, links, YouTube)<span class="cn-step"> 上传你的资料（PDF、文档、链接、YouTube）</span></li>
+          <li>Click "Audio Overview" to generate a podcast episode<span class="cn-step"> 点击"音频概述"生成播客节目</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CODE ═══ -->
+<div class="sec" id="code">
+  <div class="sec-label rv"><div class="num">5</div>Coding 编程</div>
+  <h2 class="rv d1">AI Coding Tools</h2>
+  <div class="h2cn rv d2">AI编程工具 — 让每个人都能编程</div>
+
+  <div class="tool-grid">
+    <div class="tool-card tc-amber rv">
+      <div class="tool-head">
+        <div class="tool-icon">&#128187;</div>
+        <div class="tool-info"><h3>Claude Code</h3><div class="tool-cn">Anthropic 命令行编程代理</div><span class="tool-cat">Coding Agent 编程代理</span></div>
+      </div>
+      <div class="tool-desc">A terminal-based AI coding agent that reads your codebase, edits files, runs tests, and commits code. Works across entire repositories. Think of it as a senior developer in your terminal.</div>
+      <div class="tool-desc-cn">基于终端的AI编程代理，能够阅读代码库、编辑文件、运行测试和提交代码。可处理整个代码仓库。就像终端里的高级开发者。</div>
+      <div class="tool-use">
+        <h4>How to Use 使用方法</h4>
+        <ol class="use-steps">
+          <li>Install: npm install -g @anthropic-ai/claude-code<span class="cn-step"> 安装：npm install -g @anthropic-ai/claude-code</span></li>
+          <li>Run "claude" in your project directory<span class="cn-step"> 在项目目录中运行"claude"</span></li>
+          <li>Describe what you want to build, fix, or change<span class="cn-step"> 描述你想构建、修复或更改的内容</span></li>
+          <li>It reads files, writes code, runs tests autonomously<span class="cn-step"> 它会自主阅读文件、编写代码、运行测试</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tool-card tc-blue rv d1">
+      <div class="tool-head">
+        <div class="tool-icon">&#9997;</div>
+        <div class="tool-info"><h3>Cursor</h3><div class="tool-cn">AI原生代码编辑器</div><span class="tool-cat">IDE 编辑器</span></div>
+      </div>
+      <div class="tool-desc">An AI-native code editor built on VS Code. Features intelligent autocomplete, inline chat, and the ability to reference your entire codebase. The most popular AI coding IDE.</div>
+      <div class="tool-desc-cn">基于VS Code构建的AI原生代码编辑器。具有智能自动补全、内联聊天和引用整个代码库的能力。最受欢迎的AI编程IDE。</div>
+      <div class="tool-use">
+        <h4>How to Use 使用方法</h4>
+        <ol class="use-steps">
+          <li>Download from cursor.com (free tier available)<span class="cn-step"> 从 cursor.com 下载（有免费版）</span></li>
+          <li>Use Cmd+K for inline code generation<span class="cn-step"> 用 Cmd+K 内联生成代码</span></li>
+          <li>Use Cmd+L to chat about your codebase with full context<span class="cn-step"> 用 Cmd+L 带完整上下文与代码库对话</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tool-card tc-green rv d2">
+      <div class="tool-head">
+        <div class="tool-icon">&#128640;</div>
+        <div class="tool-info"><h3>GitHub Copilot</h3><div class="tool-cn">GitHub AI编程助手</div><span class="tool-cat">Autocomplete 自动补全</span></div>
+      </div>
+      <div class="tool-desc">GitHub's AI pair programmer. Integrates into VS Code, JetBrains, and Neovim. Suggests entire functions, generates tests, and explains code. Now with Copilot Chat and Workspace for multi-file edits.</div>
+      <div class="tool-desc-cn">GitHub的AI配对编程工具。集成到VS Code、JetBrains和Neovim。建议完整函数、生成测试和解释代码。现在有Copilot Chat和Workspace支持多文件编辑。</div>
+      <div class="tool-use">
+        <h4>How to Use 使用方法</h4>
+        <ol class="use-steps">
+          <li>Subscribe at github.com/features/copilot (free for students)<span class="cn-step"> 在 github.com/features/copilot 订阅（学生免费）</span></li>
+          <li>Install the extension in your IDE<span class="cn-step"> 在你的IDE中安装扩展</span></li>
+          <li>Start typing — suggestions appear inline automatically<span class="cn-step"> 开始输入——建议会自动内联出现</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ WRITING ═══ -->
+<div class="sec" id="writing">
+  <div class="sec-label rv"><div class="num">6</div>Writing & Design 写作与设计</div>
+  <h2 class="rv d1">AI Writing & Design</h2>
+  <div class="h2cn rv d2">AI写作与设计工具</div>
+
+  <div class="tool-grid">
+    <div class="tool-card tc-purple rv">
+      <div class="tool-head">
+        <div class="tool-icon">&#128196;</div>
+        <div class="tool-info"><h3>Notion AI</h3><div class="tool-cn">Notion AI写作助手</div><span class="tool-cat">Writing 写作</span></div>
+      </div>
+      <div class="tool-desc">AI integrated into Notion's workspace. Summarize pages, generate content, translate, fix grammar, brainstorm, and create action items &mdash; all within your existing notes and docs.</div>
+      <div class="tool-desc-cn">集成到Notion工作区的AI。在现有笔记和文档中总结页面、生成内容、翻译、修正语法、头脑风暴和创建待办事项。</div>
+      <div class="tool-use">
+        <h4>How to Use 使用方法</h4>
+        <ol class="use-steps">
+          <li>Open any Notion page, press Space to invoke AI<span class="cn-step"> 打开任何Notion页面，按空格键调用AI</span></li>
+          <li>Ask it to summarize, translate, or continue writing<span class="cn-step"> 要求它总结、翻译或继续写作</span></li>
+          <li>Use Q&A to ask questions about your entire workspace<span class="cn-step"> 用问答功能对整个工作区提问</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tool-card tc-rose rv d1">
+      <div class="tool-head">
+        <div class="tool-icon">&#127912;</div>
+        <div class="tool-info"><h3>Canva AI</h3><div class="tool-cn">Canva AI设计</div><span class="tool-cat">Design 设计</span></div>
+      </div>
+      <div class="tool-desc">AI-powered design tool for everyone. Magic Design generates presentations, social posts, and videos from a text prompt. Magic Eraser removes objects. Magic Write generates copy.</div>
+      <div class="tool-desc-cn">面向所有人的AI设计工具。Magic Design从文字提示生成演示文稿、社交帖子和视频。Magic Eraser移除对象。Magic Write生成文案。</div>
+      <div class="tool-use">
+        <h4>How to Use 使用方法</h4>
+        <ol class="use-steps">
+          <li>Visit canva.com (generous free tier)<span class="cn-step"> 访问 canva.com（慷慨的免费额度）</span></li>
+          <li>Click "Magic Design" and describe what you need<span class="cn-step"> 点击"Magic Design"描述你的需求</span></li>
+          <li>Edit, customize, then export in any format<span class="cn-step"> 编辑、自定义后以任何格式导出</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PRODUCTIVITY ═══ -->
+<div class="sec" id="productivity">
+  <div class="sec-label rv"><div class="num">7</div>Productivity 效率工具</div>
+  <h2 class="rv d1">AI Productivity</h2>
+  <div class="h2cn rv d2">AI效率工具 — 自动化你的工作流</div>
+
+  <div class="tool-grid">
+    <div class="tool-card tc-teal rv">
+      <div class="tool-head">
+        <div class="tool-icon">&#128270;</div>
+        <div class="tool-info"><h3>Perplexity</h3><div class="tool-cn">AI搜索引擎</div><span class="tool-cat">Search 搜索</span></div>
+      </div>
+      <div class="tool-desc">An AI search engine that gives direct answers with cited sources. Combines real-time web search with LLM reasoning. Replaces traditional search for research-heavy tasks.</div>
+      <div class="tool-desc-cn">给出带引用来源的直接答案的AI搜索引擎。结合实时网络搜索和大模型推理。在研究密集型任务中替代传统搜索。</div>
+      <div class="tool-use">
+        <h4>How to Use 使用方法</h4>
+        <ol class="use-steps">
+          <li>Visit perplexity.ai or download the app<span class="cn-step"> 访问 perplexity.ai 或下载应用</span></li>
+          <li>Ask a question as you would ask a knowledgeable friend<span class="cn-step"> 像问一位知识渊博的朋友一样提问</span></li>
+          <li>Check the cited sources for verification<span class="cn-step"> 查看引用来源进行验证</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tool-card tc-accent rv d1">
+      <div class="tool-head">
+        <div class="tool-icon">&#9889;</div>
+        <div class="tool-info"><h3>Zapier / Make</h3><div class="tool-cn">AI自动化平台</div><span class="tool-cat">Automation 自动化</span></div>
+      </div>
+      <div class="tool-desc">Connect AI tools to your workflow. Automate: "When I receive an email with an attachment, summarize it with ChatGPT and save to Notion." No coding required.</div>
+      <div class="tool-desc-cn">将AI工具连接到你的工作流。自动化："当收到带附件的邮件时，用ChatGPT总结并保存到Notion。"无需编程。</div>
+      <div class="tool-use">
+        <h4>How to Use 使用方法</h4>
+        <ol class="use-steps">
+          <li>Sign up at zapier.com or make.com<span class="cn-step"> 在 zapier.com 或 make.com 注册</span></li>
+          <li>Create a "Zap" by connecting trigger + action apps<span class="cn-step"> 通过连接触发器+动作应用创建"Zap"</span></li>
+          <li>Add AI steps (ChatGPT, Claude) in the middle<span class="cn-step"> 在中间添加AI步骤（ChatGPT、Claude）</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tool-card tc-blue rv d2">
+      <div class="tool-head">
+        <div class="tool-icon">&#128221;</div>
+        <div class="tool-info"><h3>Gamma</h3><div class="tool-cn">AI演示文稿</div><span class="tool-cat">Presentations 演示</span></div>
+      </div>
+      <div class="tool-desc">Generate beautiful presentations, documents, and web pages from a text prompt. Paste your notes, and Gamma creates a polished deck in seconds. Great alternative to PowerPoint.</div>
+      <div class="tool-desc-cn">从文字提示生成漂亮的演示文稿、文档和网页。粘贴笔记，Gamma几秒钟内创建精美幻灯片。PowerPoint的绝佳替代品。</div>
+      <div class="tool-use">
+        <h4>How to Use 使用方法</h4>
+        <ol class="use-steps">
+          <li>Visit gamma.app (free credits to start)<span class="cn-step"> 访问 gamma.app（有免费额度）</span></li>
+          <li>Paste your content or describe the presentation topic<span class="cn-step"> 粘贴内容或描述演示主题</span></li>
+          <li>Choose a style, then edit and present directly in browser<span class="cn-step"> 选择风格后直接在浏览器中编辑和演示</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TIPS ═══ -->
+<div class="sec" id="tips">
+  <div class="sec-label rv"><div class="num">8</div>Universal Tips 通用技巧</div>
+  <h2 class="rv d1">Master Any AI Tool</h2>
+  <div class="h2cn rv d2">掌握任何AI工具的通用法则</div>
+
+  <div class="tips-grid">
+    <div class="tip-card rv">
+      <h3>Be Specific, Not Vague</h3>
+      <div class="tip-cn">具体，不要模糊</div>
+      <p>"Write a 200-word product description for a wireless earphone targeting fitness enthusiasts, emphasizing sweat resistance and bass quality."</p>
+      <div class="cn-text">"为无线耳机写一段200字的产品描述，目标用户是健身爱好者，强调防汗和低音品质。"</div>
+    </div>
+    <div class="tip-card rv d1">
+      <h3>Give Examples</h3>
+      <div class="tip-cn">提供示例</div>
+      <p>Show the AI what you want by providing examples of the style, format, or tone you're looking for. "Write it like this example: [paste example]."</p>
+      <div class="cn-text">通过提供风格、格式或语气的示例来展示你想要什么。"按照这个例子来写：[粘贴示例]。"</div>
+    </div>
+    <div class="tip-card rv d2">
+      <h3>Iterate, Don't Start Over</h3>
+      <div class="tip-cn">迭代，不要重来</div>
+      <p>If the first result isn't perfect, refine it: "Make it shorter", "More formal", "Add humor". Each round gets closer to what you want.</p>
+      <div class="cn-text">如果第一次结果不完美，继续改进："缩短一点"、"更正式"、"加点幽默"。每一轮都更接近你想要的。</div>
+    </div>
+    <div class="tip-card rv d3">
+      <h3>Assign a Role</h3>
+      <div class="tip-cn">分配角色</div>
+      <p>"You are a senior marketing strategist. Review my campaign plan and suggest improvements." Role-playing dramatically improves output quality.</p>
+      <div class="cn-text">"你是一位资深营销策略师。审查我的活动方案并提出改进建议。"角色扮演能显著提升输出质量。</div>
+    </div>
+    <div class="tip-card rv d4">
+      <h3>Use the Right Tool</h3>
+      <div class="tip-cn">用对工具</div>
+      <p>ChatGPT for conversation. Claude for analysis. Midjourney for art. Perplexity for research. Don't use a hammer when you need a screwdriver.</p>
+      <div class="cn-text">ChatGPT用于对话，Claude用于分析，Midjourney用于艺术，Perplexity用于研究。需要螺丝刀的时候别用锤子。</div>
+    </div>
+    <div class="tip-card rv d5">
+      <h3>Always Verify</h3>
+      <div class="tip-cn">始终验证</div>
+      <p>AI can hallucinate. Always fact-check critical information, especially numbers, dates, quotes, and legal/medical advice. Trust but verify.</p>
+      <div class="cn-text">AI会产生幻觉。始终核查关键信息，特别是数字、日期、引用和法律/医学建议。信任但要验证。</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>AI Tools Guide &mdash; AI工具使用指南</p>
+  <p class="cn" style="margin-top:4px;">人人都能学会的AI实用手册 &middot; 2026 Edition</p>
+  <p style="margin-top:4px;opacity:.4;">&copy; 2026</p>
+  <p style="margin-top:.8rem;"><a href="https://github.com/gewenbo888/ai-tools-guide" target="_blank" rel="noopener" style="color:var(--dim);font-size:.7rem;letter-spacing:.08em;text-decoration:none;border:1px solid var(--faint);padding:6px 16px;border-radius:100px;transition:all .3s;display:inline-block;" onmouseover="this.style.borderColor='rgba(255,107,53,.3)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--faint)';this.style.color='var(--dim)'">View on GitHub &rarr;</a></p>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:.06});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+const navLinks=document.querySelectorAll('.nav-link');
+const secs=document.querySelectorAll('.sec[id]');
+const navObs=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(e.isIntersecting){
+      navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id));
+    }
+  });
+},{threshold:.12,rootMargin:'-52px 0px -40% 0px'});
+secs.forEach(s=>navObs.observe(s));
+</script>
+</body>
+</html>
